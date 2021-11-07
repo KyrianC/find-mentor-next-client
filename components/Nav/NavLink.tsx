@@ -1,18 +1,19 @@
-import { Link } from "@chakra-ui/react"
+import { Link, Text } from "@chakra-ui/react"
 import NextLink from "next/link"
 import React from "react"
 
 type props = {
-    children: React.ReactNode;
+    name: string
     href: string;
-
 }
 
-const NavLink = ({ children, href }: props): JSX.Element => {
+const NavLink = ({ name, href }: props): JSX.Element => {
+
+
     return (
         <NextLink href={href}>
             <Link px="2">
-                {children}
+                <Text>{name}</Text>
             </Link>
         </NextLink>
     )
