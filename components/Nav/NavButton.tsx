@@ -1,16 +1,17 @@
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons"
 import { IconButton } from "@chakra-ui/react"
+import React from "react"
 
 type props = {
     isOpen: boolean;
-    toggle: () => void
+    onToggle: React.MouseEventHandler
 }
 
-const MenuButton = ({ isOpen, toggle }: props): JSX.Element => {
+const MenuButton = ({ isOpen, onToggle }: props): JSX.Element => {
     return (
         <IconButton
             display={[null, null, 'none']}
-            onClick={toggle} aria-label="toggle menu"
+            onClick={onToggle} aria-label="toggle menu"
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
         ></IconButton>
     )

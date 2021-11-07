@@ -1,6 +1,6 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
-import { Link, Box, Text } from '@chakra-ui/react'
-import React, { MouseEventHandler } from 'react'
+import { Link, Box, Text, useDisclosure, Collapse, useOutsideClick } from '@chakra-ui/react'
+import React from 'react'
 
 type props = {
     children: React.ReactNode
@@ -8,19 +8,24 @@ type props = {
 }
 
 const NavLinkButton = ({ children, name }: props): JSX.Element => {
-    const [showChildren, setShowChildren] = React.useState(false)
+    const { isOpen, onToggle, onClose } = useDisclosure()
 
-    const toggle = () => {
-        setShowChildren(!showChildren)
-    }
+    const ref = React.useRef<HTMLDivElement>(null!)
+    useOutsideClick({
+        ref: ref,
+        handler: onClose
+    })
+
 
     return (
-        <Box display="inline-block" pos="relative">
-            <Text cursor="pointer" onClick={toggle}>
+        <Box display="inline-block" ref={ref} pos="relative">
+            <Text cursor="pointer" onClick={onToggle}>
                 {name}
-                {showChildren ? <ChevronDownIcon /> : <ChevronUpIcon />}
+                {isOpen ? <ChevronDownIcon /> : <ChevronUpIcon />}
             </Text>
-            {showChildren && children}
+            <Collapse in={isOpen} animateOpacity>
+                {isOpen && children}
+            </Collapse>
         </Box>
     )
 }
