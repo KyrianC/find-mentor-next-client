@@ -1,8 +1,8 @@
-import { Stack } from "@chakra-ui/react"
-import NavLink from "./NavLink"
-import type { category } from '../../pages/api/categories'
+import { SlideFade, Stack, useBreakpointValue } from "@chakra-ui/react"
 import React, { useEffect } from "react"
+import type { category } from '../../pages/api/categories'
 import ExploreMenu from "./ExploreMenu"
+import NavLink from "./NavLink"
 import NavLinkButton from "./NavLinkButton"
 
 type props = {

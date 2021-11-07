@@ -1,5 +1,5 @@
-import { Box, Link } from "@chakra-ui/react"
 import { TriangleUpIcon } from "@chakra-ui/icons"
+import { Box } from "@chakra-ui/react"
 import type { category } from "../../pages/api/categories"
 import NavLink from "./NavLink"
 

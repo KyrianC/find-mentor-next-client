@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
-import { Link, Box, Text, useDisclosure, Collapse, useOutsideClick } from '@chakra-ui/react'
+import { Box, Collapse, useBreakpoint, useDisclosure, useOutsideClick } from '@chakra-ui/react'
 import React from 'react'
 
 type props = {

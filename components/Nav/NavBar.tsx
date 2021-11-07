@@ -1,4 +1,4 @@
-import { Flex, Box, Spacer, Fade, useDisclosure } from "@chakra-ui/react";
+import { Flex, Spacer, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import NavButton from "./NavButton";
 import NavItems from "./NavItems";
