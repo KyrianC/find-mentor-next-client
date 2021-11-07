@@ -14,6 +14,7 @@ const NavItems = ({ isOpen }: props): JSX.Element => {
 
     const [nav, setNav] = React.useState<category[] | null>(null)
 
+    const variant = useBreakpointValue({ base: '100%', md: 'auto' })
 
     useEffect(() => {
         fetch('/api/categories')
@@ -23,22 +24,29 @@ const NavItems = ({ isOpen }: props): JSX.Element => {
 
 
     return (
-        <Stack
-            bg={['gray.900', null, 'gray.800']}
-            borderRadius="md"
-            mt={["2", null, "0"]}
-            padding="2"
-            display={{ base: isOpen ? 'flex' : 'none', md: 'flex' }}
-            width={['100%', '100%', 'auto']}
-            direction={['column', 'row']}
-            justifyContent={['center', 'space-around']}
-            textAlign="center"
+        <SlideFade
+            style={{ width: variant }}
+            offsetY="-20px"
+            in={variant != '100%' ? true : isOpen}
+            unmountOnExit
+            reverse
         >
-            <NavLink name="About" href="/about" />
-            <NavLink name="Contact" href="/contact" />
-            <NavLinkButton name="Explore"><ExploreMenu categories={nav} /></NavLinkButton>
-            <NavLink name="Join" href="/join" />
-        </Stack>
+            <Stack
+                bg={['gray.900', null, 'gray.800']}
+                borderRadius="md"
+                mt={["2", null, "0"]}
+                padding="2"
+                width={['100%', '100%', 'auto']}
+                direction={['column', 'row']}
+                justifyContent={['center', 'space-around']}
+                textAlign="center"
+            >
+                <NavLink name="About" href="/about" />
+                <NavLink name="Contact" href="/contact" />
+                <NavLinkButton name="Explore"><ExploreMenu categories={nav} /></NavLinkButton>
+                <NavLink name="Join" href="/join" />
+            </Stack>
+        </SlideFade>
     )
 }
 

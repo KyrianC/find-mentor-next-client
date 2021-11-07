@@ -8,7 +8,7 @@ type props = {
 }
 
 const NavLinkButton = ({ children, name }: props): JSX.Element => {
-    const { isOpen, onToggle, onClose } = useDisclosure()
+    const { isOpen, onToggle, onClose, onOpen } = useDisclosure()
 
     const ref = React.useRef<HTMLDivElement>(null!)
     useOutsideClick({
@@ -17,14 +17,26 @@ const NavLinkButton = ({ children, name }: props): JSX.Element => {
     })
 
 
+    // don't listen to hover on mobile viewport
+    const breakpoint = useBreakpoint()
+    const handleMouseEnter = () => breakpoint == 'base' ? undefined : onOpen()
+    const handleMouseLeave = () => breakpoint == 'base' ? undefined : onClose()
+
+
     return (
-        <Box display="inline-block" ref={ref} pos="relative">
-            <Text cursor="pointer" onClick={onToggle}>
-                {name}
-                {isOpen ? <ChevronDownIcon /> : <ChevronUpIcon />}
-            </Text>
+        <Box
+            display="inline-block"
+            ref={ref}
+            pos="relative"
+            cursor="pointer"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={onToggle}
+        >
+            {name}
+            {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
             <Collapse in={isOpen} animateOpacity>
-                {isOpen && children}
+                {children}
             </Collapse>
         </Box>
     )
