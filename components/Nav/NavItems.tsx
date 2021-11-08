@@ -1,4 +1,4 @@
-import { SlideFade, Stack, useBreakpointValue } from "@chakra-ui/react"
+import { Collapse, Stack, useBreakpointValue } from "@chakra-ui/react"
 import React, { useEffect } from "react"
 import type { category } from '../../pages/api/categories'
 import ExploreMenu from "./ExploreMenu"
@@ -24,12 +24,10 @@ const NavItems = ({ isOpen }: props): JSX.Element => {
 
 
     return (
-        <SlideFade
+        <Collapse
             style={{ width: variant }}
-            offsetY="-20px"
             in={variant != '100%' ? true : isOpen}
             unmountOnExit
-            reverse
         >
             <Stack
                 bg={['gray.900', null, 'gray.800']}
@@ -46,7 +44,7 @@ const NavItems = ({ isOpen }: props): JSX.Element => {
                 <NavLinkButton name="Explore"><ExploreMenu categories={nav} /></NavLinkButton>
                 <NavLink name="Join" href="/join" />
             </Stack>
-        </SlideFade>
+        </Collapse>
     )
 }
 

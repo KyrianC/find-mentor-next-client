@@ -10,7 +10,13 @@ type props = {
 const ExploreMenu = ({ categories }: props): JSX.Element => {
     return (
         <>
-            <TriangleUpIcon pos="absolute" right="50%" transform="translateX(50%)" display={['none', 'initial']} color="gray.700" />
+            <TriangleUpIcon
+                pos="absolute"
+                right="50%"
+                transform="translateX(50%)"
+                display={['none', 'initial']}
+                color="gray.700"
+            />
             <Box
                 bg="gray.700"
                 borderRadius="lg"
@@ -22,7 +28,11 @@ const ExploreMenu = ({ categories }: props): JSX.Element => {
             >
                 {categories ? (
                     categories.map(item => (
-                        <NavLink key={item.slug} name={item.displayName} href={'/explore' + item.slug} />
+                        <NavLink
+                            key={item.slug}
+                            name={item.displayName}
+                            href={'/explore' + item.slug}
+                        />
                     ))
                 ) : (
                     "loading..."
