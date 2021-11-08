@@ -3,17 +3,17 @@ import NextLink from "next/link"
 import React from "react"
 
 type props = {
-    name: string
     href: string;
+    children: React.ReactNode
 }
 
-const NavLink = ({ name, href }: props): JSX.Element => {
+const NavLink = ({ href, children }: props): JSX.Element => {
 
 
     return (
         <NextLink href={href}>
             <Link px="2">
-                <Text>{name}</Text>
+                {children}
             </Link>
         </NextLink>
     )

@@ -39,12 +39,12 @@ const NavItems = ({ isOpen }: props): JSX.Element => {
                 justifyContent={['center', 'space-around']}
                 textAlign="center"
             >
-                <NavLink name="About" href="/about" />
-                <NavLink name="Contact" href="/contact" />
+                <NavLink href="/about">About</NavLink>
+                <NavLink href="/contact">Contact</NavLink>
                 <NavLinkButton name="Explore"><ExploreMenu categories={nav} /></NavLinkButton>
-                <NavLink name="Join" href="/join" />
+                <NavLink href="/join">Join</NavLink>
             </Stack>
-        </Collapse>
+        </Collapse >
     )
 }
 
