@@ -3,11 +3,11 @@ import { Box, Collapse, useBreakpoint, useDisclosure, useOutsideClick } from '@c
 import React from 'react'
 
 type props = {
+    toShow: JSX.Element
     children: React.ReactNode
-    name: string
 }
 
-const NavLinkButton = ({ children, name }: props): JSX.Element => {
+const NavLinkButton = ({ children, toShow }: props): JSX.Element => {
     const { isOpen, onToggle, onClose, onOpen } = useDisclosure()
 
     const ref = React.useRef<HTMLDivElement>(null!)
@@ -33,10 +33,10 @@ const NavLinkButton = ({ children, name }: props): JSX.Element => {
             onMouseLeave={handleMouseLeave}
             onClick={onToggle}
         >
-            {name}
+            {children}
             {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
             <Collapse in={isOpen} animateOpacity>
-                {children}
+                {toShow}
             </Collapse>
         </Box>
     )

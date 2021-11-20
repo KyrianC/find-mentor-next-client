@@ -10,7 +10,6 @@ type props = {
 const MenuButton = ({ isOpen, onToggle }: props): JSX.Element => {
     return (
         <IconButton
-            zIndex={10}
             display={[null, null, 'none']}
             onClick={onToggle} aria-label="toggle menu"
             icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}

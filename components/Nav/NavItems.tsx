@@ -1,6 +1,5 @@
 import { Collapse, Stack, useBreakpointValue } from "@chakra-ui/react"
 import React, { useEffect } from "react"
-import type { category } from '../../pages/api/categories'
 import ExploreMenu from "./ExploreMenu"
 import NavLink from "./NavLink"
 import NavLinkButton from "./NavLinkButton"
@@ -9,6 +8,11 @@ type props = {
     isOpen: boolean
 }
 
+export type category = {
+    title: string,
+    slug: string,
+    sub_categories: category[]
+}
 
 const NavItems = ({ isOpen }: props): JSX.Element => {
 
@@ -17,9 +21,12 @@ const NavItems = ({ isOpen }: props): JSX.Element => {
     const variant = useBreakpointValue({ base: '100%', md: 'auto' })
 
     useEffect(() => {
-        fetch('/api/categories')
-            .then(res => res.json())
-            .then((data: category[]) => setNav(data))
+        const fetchNav = async () => {
+            const res = await fetch('http://localhost:8000/api/categories/nav/')
+            const data: category[] = await res.json()
+            setNav(data)
+        }
+        fetchNav()
     }, [])
 
 
@@ -41,7 +48,7 @@ const NavItems = ({ isOpen }: props): JSX.Element => {
             >
                 <NavLink href="/about">About</NavLink>
                 <NavLink href="/contact">Contact</NavLink>
-                <NavLinkButton name="Explore"><ExploreMenu categories={nav} /></NavLinkButton>
+                <NavLinkButton toShow={<ExploreMenu categories={nav} />}>Explore</NavLinkButton>
                 <NavLink href="/join">Join</NavLink>
             </Stack>
         </Collapse >

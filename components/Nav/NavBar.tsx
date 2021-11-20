@@ -8,7 +8,7 @@ export default function NavBar() {
     const { isOpen, onToggle } = useDisclosure()
 
     return (
-        <Flex bg="gray.800" position="sticky" top="0" alignItems="center" p="2" wrap="wrap">
+        <Flex zIndex="10" bg="gray.800" position="sticky" top="0" alignItems="center" p="2" wrap="wrap">
             <NavLogo />
             <Spacer />
             <NavButton onToggle={onToggle} isOpen={isOpen} />

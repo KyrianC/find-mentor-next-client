@@ -1,7 +1,7 @@
 import { TriangleUpIcon } from "@chakra-ui/icons"
-import { Box, VStack } from "@chakra-ui/react"
-import type { category } from "../../pages/api/categories"
+import { VStack } from "@chakra-ui/react"
 import NavLink from "./NavLink"
+import type { category } from './NavItems'
 
 type props = {
     categories: category[] | null
@@ -30,8 +30,8 @@ const ExploreMenu = ({ categories }: props): JSX.Element => {
                     categories.map(item => (
                         <NavLink
                             key={item.slug}
-                            href={'/explore' + item.slug}
-                        >{item.displayName}</NavLink>
+                            href={'/explore/' + item.slug}
+                        >{item.title}</NavLink>
                     ))
                 ) : (
                     "loading..."
