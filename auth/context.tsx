@@ -2,7 +2,22 @@ import React from 'react'
 import axios from 'axios'
 import * as authTypes from './types'
 
-const AuthContext = React.createContext<authTypes.AuthContextInterface | null>(null)
+/* HACK need a default/dummy context to pass to React.createContext
+* because it needs intial value, otherwise we would need to pass:
+*   `React.CreateContext<AuthContextInterface | null>(null)`
+* and we would need to check if value is null each time in views */
+const defaultAuthContext: authTypes.AuthContextInterface = {
+    loading: false,
+    isAuthenticated: false,
+    user: null,
+    accessToken: null,
+    refreshToken: null,
+    login: async () => { },
+    logout: async () => { },
+    signUp: async () => { },
+}
+
+const AuthContext = React.createContext<authTypes.AuthContextInterface>(defaultAuthContext)
 
 export const AuthProvider = ({ children }: authTypes.AuthContextProps): JSX.Element => {
     const [loading, setLoading] = React.useState(false)
