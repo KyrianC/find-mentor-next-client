@@ -7,7 +7,6 @@ import * as authTypes from './types'
 *   `React.CreateContext<AuthContextInterface | null>(null)`
 * and we would need to check if value is null each time in views */
 const defaultAuthContext: authTypes.AuthContextInterface = {
-    loading: false,
     isAuthenticated: false,
     user: null,
     accessToken: null,
@@ -20,7 +19,6 @@ const defaultAuthContext: authTypes.AuthContextInterface = {
 const AuthContext = React.createContext<authTypes.AuthContextInterface>(defaultAuthContext)
 
 export const AuthProvider = ({ children }: authTypes.AuthContextProps): JSX.Element => {
-    const [loading, setLoading] = React.useState(false)
     const [isAuthenticated, setIsAuthenticated] = React.useState(false)
     const [user, setUser] = React.useState<authTypes.UserResponse | null>(null)
     const [accessToken, setAccessToken] = React.useState<string | null>(null)
@@ -103,19 +101,15 @@ export const AuthProvider = ({ children }: authTypes.AuthContextProps): JSX.Elem
     }
 
     const login = async (postData: authTypes.loginData) => {
-        setLoading(true)
         const res = await instance.post('auth/login/', postData)
         const data: authTypes.LoginResponse = res.data
         authenticate(data)
-        setLoading(false)
     }
 
     const signUp = async (postData: authTypes.registerData): Promise<void> => {
-        setLoading(true)
         const res = await instance.post('auth/registration/', postData)
         const data: authTypes.LoginResponse = res.data
         authenticate(data)
-        setLoading(false)
     }
 
     const logout = async () => {
@@ -148,7 +142,6 @@ export const AuthProvider = ({ children }: authTypes.AuthContextProps): JSX.Elem
 
 
     const value: authTypes.AuthContextInterface = {
-        loading,
         isAuthenticated,
         user,
         accessToken,
