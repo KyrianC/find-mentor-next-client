@@ -43,7 +43,6 @@ const Login: NextPage = () => {
                 duration: 3000,
                 isClosable: true,
                 position: 'top',
-                variant: 'solid'
             })
         } catch (err) {
             if (err && typeof err.response.data == 'object') {
@@ -76,7 +75,9 @@ const Login: NextPage = () => {
                         />
                         <InputRightElement children={<FormErrorIcon color="red.400" />} />
                     </InputGroup>
-                    <FormErrorMessage>{err?.username}</FormErrorMessage>
+                    {err?.username?.map(error => (
+                        <FormErrorMessage>{error}</FormErrorMessage>
+                    ))}
                 </FormControl>
                 <FormControl mb="4" isInvalid={err?.password && true} isRequired>
                     <FormLabel>Password</FormLabel>
@@ -88,9 +89,11 @@ const Login: NextPage = () => {
                         />
                         <InputRightElement children={<FormErrorIcon color="red.400" />} />
                     </InputGroup>
-                    <FormErrorMessage>{err?.password}</FormErrorMessage>
+                    {err?.password?.map(error => (
+                        <FormErrorMessage>{error}</FormErrorMessage>
+                    ))}
                 </FormControl>
-                <Text fontSize="sm" mb="4">Forgot Password?<NextLink href="/signup"><Link color="teal">Click Here</Link></NextLink></Text>
+                <Text fontSize="sm" mb="4">Forgot Password? <NextLink href="/user/forgot-password"><Link color="teal">Click Here</Link></NextLink></Text>
                 <Button mb="4" disabled={auth.isAuthenticated} isLoading={loading} colorScheme="teal" type="submit">Login</Button>
             </form>
             <Text fontSize="sm">Don't have an account? <NextLink href="/signup"><Link color="teal">Register here</Link></NextLink></Text>
