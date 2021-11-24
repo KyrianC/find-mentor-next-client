@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
-import { Box, Collapse, useBreakpoint, useDisclosure, useOutsideClick } from '@chakra-ui/react'
+import { Box, Collapse, useBreakpoint, useDisclosure, useOutsideClick, Link } from '@chakra-ui/react'
 import React from 'react'
 
 type props = {
@@ -33,12 +33,12 @@ const NavLinkButton = ({ children, toShow }: props): JSX.Element => {
             onMouseLeave={handleMouseLeave}
             onClick={onToggle}
         >
-            {children}
+            <Link _hover={{ color: 'teal.300' }} color={isOpen ? 'teal.300' : 'inherit'}>{children}</Link>
             {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
             <Collapse in={isOpen} animateOpacity>
                 {toShow}
             </Collapse>
-        </Box>
+        </Box >
     )
 }
 

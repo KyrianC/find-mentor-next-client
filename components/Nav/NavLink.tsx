@@ -12,7 +12,7 @@ const NavLink = ({ href, children }: props): JSX.Element => {
 
     return (
         <NextLink href={href}>
-            <Link px="2">
+            <Link px="2" _hover={{ color: 'teal.300' }}>
                 {children}
             </Link>
         </NextLink>
