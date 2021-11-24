@@ -117,6 +117,10 @@ export const AuthProvider = ({ children }: authTypes.AuthContextProps): JSX.Elem
         desAuthenticate()
     }
 
+    const resetPassword = async (postData: { email: string }) => {
+        await instance.post('auth/password/reset/', postData)
+    }
+
 
 
     const initAuth = () => {
@@ -149,6 +153,7 @@ export const AuthProvider = ({ children }: authTypes.AuthContextProps): JSX.Elem
         login,
         logout,
         signUp,
+        resetPassword,
     }
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

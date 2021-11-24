@@ -45,6 +45,7 @@ export interface AuthContextInterface {
     login: (postData: loginData) => Promise<void>
     logout: () => Promise<void>
     signUp: (postData: registerData) => Promise<void>
+    resetPassword: (postData: { email: string }) => Promise<void>
 }
 
 export interface AuthContextProps {
