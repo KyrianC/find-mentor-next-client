@@ -37,7 +37,6 @@ export type loginData = {
 
 
 export interface AuthContextInterface {
-    loading: boolean
     isAuthenticated: boolean
     user: UserResponse | null
     accessToken: string | null

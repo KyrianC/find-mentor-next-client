@@ -14,6 +14,7 @@ const defaultAuthContext: authTypes.AuthContextInterface = {
     login: async () => { },
     logout: async () => { },
     signUp: async () => { },
+    resetPassword: async () => { },
 }
 
 const AuthContext = React.createContext<authTypes.AuthContextInterface>(defaultAuthContext)
@@ -24,7 +25,7 @@ export const AuthProvider = ({ children }: authTypes.AuthContextProps): JSX.Elem
     const [accessToken, setAccessToken] = React.useState<string | null>(null)
     const [refreshToken, setRefreshToken] = React.useState<string | null>(null)
 
-    const ACCESS_TOKEN_LIFETIME = 1000 * 15 * 1
+    const ACCESS_TOKEN_LIFETIME = 1000 * 60 * 5 // 5min
 
     const instance = axios.create({
         baseURL: process.env.BASE_API_URL,
@@ -33,15 +34,6 @@ export const AuthProvider = ({ children }: authTypes.AuthContextProps): JSX.Elem
         }
     })
 
-
-
-    const tokenIsValid = (expiryDate: number): boolean => {
-        if (expiryDate < Date.now()) {
-            return true
-        } else {
-            return false
-        }
-    }
 
     const fetchUserResponse = async (token: string) => {
         try {
@@ -129,7 +121,7 @@ export const AuthProvider = ({ children }: authTypes.AuthContextProps): JSX.Elem
         const localDate = localStorage.getItem('expiry_date')
         if (localAccessToken !== null && localRefreshToken !== null && localDate !== null) {
             const date = Date.parse(localDate)
-            if (tokenIsValid(date)) {
+            if (date < Date.now()) {
                 fetchUserResponse(localAccessToken)
                 setAccessToken(localAccessToken)
                 setRefreshToken(localRefreshToken)
