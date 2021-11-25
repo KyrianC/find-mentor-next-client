@@ -1,7 +1,8 @@
-import { Alert, AlertDescription, AlertIcon, Box, Button, Container, FormControl, FormErrorIcon, FormErrorMessage, FormLabel, Input, InputGroup, InputRightElement, Link, Text, useToast } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, Box, Button, Container, Link, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import React from "react";
 import { useAuth } from '../../auth/context';
+import FormInput from '../../components/Form/CustomInput';
 import useForm from '../../utils/useForm';
 
 type forgotPasswordErrorResponse = {
@@ -41,17 +42,15 @@ const ForgotPassword: NextPage = () => {
                 <AlertDescription>{error.non_field_errors}</AlertDescription>
             </Alert>}
             <Box visibility={!sent ? 'visible' : 'hidden'}>
-                <form method=" f" id="" action="">
-                    <FormControl isInvalid={error?.email && true} mb="4" isRequired>
-                        <FormLabel>Email</FormLabel>
-                        <InputGroup>
-                            <Input errorBorderColor="red.500" type="email" onChange={handleChange} />
-                            <InputRightElement children={<FormErrorIcon color="red.400" />} />
-                        </InputGroup>
-                        {error?.email?.map(err => (
-                            <FormErrorMessage>{err}</FormErrorMessage>
-                        ))}
-                    </FormControl>
+                <form>
+                    <FormInput
+                        isRequired
+                        label='Email'
+                        name="email"
+                        inputType="email"
+                        handleChange={handleChange}
+                        errors={error?.email}
+                    />
                     <Button type="submit" onClick={handleSubmit} isLoading={loading} colorScheme="teal">
                         Reset Password
                     </Button>

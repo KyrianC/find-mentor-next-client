@@ -1,10 +1,11 @@
-import { Alert, AlertDescription, AlertIcon, Button, Container, FormControl, FormErrorIcon, FormErrorMessage, FormLabel, Input, InputGroup, InputRightElement, Link, Text, useToast } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, Button, Container, Link, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent } from 'react';
 import { useAuth } from "../auth/context";
 import type { loginData } from '../auth/types';
+import FormInput from '../components/Form/CustomInput';
 import useForm from '../utils/useForm';
 
 
@@ -54,38 +55,43 @@ const Login: NextPage = () => {
                 <AlertDescription>{err?.non_field_errors}</AlertDescription>
             </Alert>}
             <form onSubmit={handleLogin}>
-                <FormControl mb="4" isInvalid={err?.username && true} isRequired>
-                    <FormLabel>Username</FormLabel>
-                    <InputGroup>
-                        <Input
-                            errorBorderColor="red.500"
-                            onChange={handleUsernameChange}
-                            type="text"
-                        />
-                        <InputRightElement children={<FormErrorIcon color="red.400" />} />
-                    </InputGroup>
-                    {err?.username?.map(error => (
-                        <FormErrorMessage>{error}</FormErrorMessage>
-                    ))}
-                </FormControl>
-                <FormControl mb="4" isInvalid={err?.password && true} isRequired>
-                    <FormLabel>Password</FormLabel>
-                    <InputGroup>
-                        <Input
-                            errorBorderColor="red.500"
-                            onChange={handlePasswordChange}
-                            type="password"
-                        />
-                        <InputRightElement children={<FormErrorIcon color="red.400" />} />
-                    </InputGroup>
-                    {err?.password?.map(error => (
-                        <FormErrorMessage>{error}</FormErrorMessage>
-                    ))}
-                </FormControl>
-                <Text fontSize="sm" mb="4">Forgot Password? <NextLink href="/user/forgot-password"><Link color="teal">Click Here</Link></NextLink></Text>
-                <Button mb="4" disabled={auth.isAuthenticated} isLoading={loading} colorScheme="teal" type="submit">Login</Button>
+                <FormInput
+                    isRequired
+                    label="Username"
+                    name="username"
+                    inputType="text"
+                    handleChange={handleUsernameChange}
+                    errors={err?.username}
+                />
+                <FormInput
+                    isRequired
+                    label="Password"
+                    name="password"
+                    inputType="password"
+                    handleChange={handlePasswordChange}
+                    errors={err?.password}
+                />
+                <Text fontSize="sm" mb="4">
+                    Forgot Password?{" "}
+                    <NextLink href="/user/forgot-password">
+                        <Link color="teal">Click Here</Link>
+                    </NextLink>
+                </Text>
+                <Button
+                    mb="4"
+                    isLoading={loading}
+                    colorScheme="teal"
+                    type="submit"
+                >
+                    Login
+                </Button>
             </form>
-            <Text fontSize="sm">Don't have an account? <NextLink href="/signup"><Link color="teal">Register here</Link></NextLink></Text>
+            <Text fontSize="sm">
+                Don't have an account?{" "}
+                <NextLink href="/signup">
+                    <Link color="teal">Register here</Link>
+                </NextLink>
+            </Text>
         </Container>
     )
 }
