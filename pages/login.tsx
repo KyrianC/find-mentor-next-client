@@ -4,6 +4,8 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent } from 'react';
 import { useAuth } from "../auth/context";
+import axios, { AxiosError } from 'axios'
+
 
 type LoginErrorResponse = {
     non_field_errors?: string[]
@@ -40,21 +42,23 @@ const Login: NextPage = () => {
             toast({
                 title: 'Successfully Logged In.',
                 status: 'success',
-                duration: 3000,
-                isClosable: true,
+                duration: 2500,
                 position: 'top',
             })
         } catch (err) {
-            if (err && typeof err.response.data == 'object') {
-                setErr(err.response.data)
-                setLoading(false)
-                toast({
-                    title: "something went wrong",
-                    status: "error",
-                    duration: 2500,
-                    position: 'top'
-                })
+            if (axios.isAxiosError(err)) {
+                const loginError = err as AxiosError<LoginErrorResponse>
+                if (loginError && loginError.response) {
+                    setErr(loginError.response.data)
+                }
             }
+            setLoading(false)
+            toast({
+                title: "something went wrong.",
+                status: "error",
+                duration: 2500,
+                position: 'top'
+            })
         }
     }
 

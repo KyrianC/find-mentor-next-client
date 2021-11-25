@@ -2,8 +2,9 @@ import { Alert, AlertDescription, AlertIcon, Box, Button, Container, FormControl
 import { NextPage } from "next";
 import React from "react";
 import { useAuth } from '../../auth/context';
+import axios, { AxiosError } from 'axios'
 
-type errorResponse = {
+type forgotPasswordErrorResponse = {
     email?: string[]
     non_field_errors?: string[]
 }
@@ -15,7 +16,7 @@ const ForgotPassword: NextPage = () => {
     const [email, setEmail] = React.useState('')
     const [loading, setLoading] = React.useState(false);
     const [sent, setSent] = React.useState(false)
-    const [error, setError] = React.useState<errorResponse | null>(null)
+    const [error, setError] = React.useState<forgotPasswordErrorResponse | null>(null)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
@@ -34,8 +35,19 @@ const ForgotPassword: NextPage = () => {
                 position: 'top'
             })
         } catch (err) {
-            setError(err.response.data)
+            if (axios.isAxiosError(err)) {
+                const errorResponse = err as AxiosError<forgotPasswordErrorResponse>
+                if (errorResponse && errorResponse.response) {
+                    setError(errorResponse.response.data)
+                }
+            }
             setLoading(false)
+            toast({
+                title: 'Something went wrong.',
+                status: 'success',
+                duration: 2500,
+                position: 'top'
+            })
         }
     }
 

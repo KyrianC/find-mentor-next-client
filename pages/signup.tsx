@@ -5,6 +5,7 @@ import React, { ChangeEvent } from 'react';
 import { useRouter } from 'next/router'
 import { useAuth } from "../auth/context";
 import type { registerData } from '../auth/types';
+import axios, { AxiosError } from 'axios'
 
 type registerErrorResponse = {
     non_field_errors?: string[]
@@ -61,16 +62,19 @@ const Login: NextPage = () => {
                 variant: 'solid'
             })
         } catch (err) {
-            if (err && typeof err.response.data == 'object') {
-                setErr(err.response.data)
-                setLoading(false)
-                toast({
-                    title: "something went wrong",
-                    status: "error",
-                    duration: 2500,
-                    position: 'top'
-                })
+            if (axios.isAxiosError(err)) {
+                const registerError = err as AxiosError<registerErrorResponse>
+                if (registerError && registerError.response) {
+                    setErr(registerError.response.data)
+                }
             }
+            setLoading(false)
+            toast({
+                title: "something went wrong",
+                status: "error",
+                duration: 2500,
+                position: 'top'
+            })
         }
     }
 
