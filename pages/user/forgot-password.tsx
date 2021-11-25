@@ -2,7 +2,7 @@ import { Alert, AlertDescription, AlertIcon, Box, Button, Container, FormControl
 import { NextPage } from "next";
 import React from "react";
 import { useAuth } from '../../auth/context';
-import axios, { AxiosError } from 'axios'
+import useForm from '../../utils/useForm';
 
 type forgotPasswordErrorResponse = {
     email?: string[]
@@ -11,7 +11,7 @@ type forgotPasswordErrorResponse = {
 
 const ForgotPassword: NextPage = () => {
     const { resetPassword } = useAuth()
-    const toast = useToast()
+    const { handleFormPost } = useForm()
 
     const [email, setEmail] = React.useState('')
     const [loading, setLoading] = React.useState(false);
@@ -22,34 +22,17 @@ const ForgotPassword: NextPage = () => {
         setEmail(e.target.value)
     }
 
-    const handleSubmit = async () => {
-        try {
-            setLoading(true)
-            await resetPassword({ email })
-            setLoading(false)
-            setSent(true)
-            toast({
-                title: 'Email sent!',
-                status: 'success',
-                duration: 2500,
-                position: 'top'
-            })
-        } catch (err) {
-            if (axios.isAxiosError(err)) {
-                const errorResponse = err as AxiosError<forgotPasswordErrorResponse>
-                if (errorResponse && errorResponse.response) {
-                    setError(errorResponse.response.data)
-                }
-            }
-            setLoading(false)
-            toast({
-                title: 'Something went wrong.',
-                status: 'success',
-                duration: 2500,
-                position: 'top'
-            })
-        }
+    const handleSubmit = () => {
+        handleFormPost({
+            postData: { email },
+            fetcher: resetPassword,
+            setErr: setError,
+            setLoading: setLoading,
+            toastSuccess: 'Email sent!',
+            toastErr: 'Something went wrong.',
+        })
     }
+
 
     return (
         <Container>

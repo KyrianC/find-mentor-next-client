@@ -4,10 +4,11 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent } from 'react';
 import { useAuth } from "../auth/context";
-import axios, { AxiosError } from 'axios'
+import type { loginData } from '../auth/types';
+import useForm from '../utils/useForm';
 
 
-type LoginErrorResponse = {
+type loginErrorResponse = {
     non_field_errors?: string[]
     username?: string[],
     email?: string[]
@@ -16,12 +17,12 @@ type LoginErrorResponse = {
 
 const Login: NextPage = () => {
     const auth = useAuth()
-    const toast = useToast()
     const router = useRouter()
+    const { handleFormPost } = useForm()
 
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
-    const [err, setErr] = React.useState<LoginErrorResponse | null>(null)
+    const [err, setErr] = React.useState<loginErrorResponse | null>(null)
     const [loading, setLoading] = React.useState(false)
 
 
@@ -32,35 +33,19 @@ const Login: NextPage = () => {
         setPassword(event.target.value)
     }
 
-    const handleLogin = async (e: React.FormEvent) => {
-        setLoading(true)
-        e.preventDefault()
-        try {
-            await auth.login({ username, password })
-            setLoading(false)
-            router.push('/')
-            toast({
-                title: 'Successfully Logged In.',
-                status: 'success',
-                duration: 2500,
-                position: 'top',
-            })
-        } catch (err) {
-            if (axios.isAxiosError(err)) {
-                const loginError = err as AxiosError<LoginErrorResponse>
-                if (loginError && loginError.response) {
-                    setErr(loginError.response.data)
-                }
-            }
-            setLoading(false)
-            toast({
-                title: "something went wrong.",
-                status: "error",
-                duration: 2500,
-                position: 'top'
-            })
-        }
+    const handleLogin = (e: React.FormEvent) => {
+        handleFormPost<loginErrorResponse, loginData>({
+            event: e,
+            postData: { username, password },
+            fetcher: auth.login,
+            setErr: setErr,
+            setLoading: setLoading,
+            toastSuccess: 'Successfully Logged In.',
+            toastErr: 'Something went wrong.',
+            onSuccess: () => { router.push('/') }
+        })
     }
+
 
     return (
         <Container>

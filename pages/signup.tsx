@@ -1,11 +1,11 @@
 import { useToast, Alert, AlertDescription, AlertIcon, Button, Container, FormControl, FormErrorIcon, FormErrorMessage, FormLabel, Input, InputGroup, InputRightElement, Link, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import NextLink from 'next/link';
-import React, { ChangeEvent } from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import React from 'react';
 import { useAuth } from "../auth/context";
 import type { registerData } from '../auth/types';
-import axios, { AxiosError } from 'axios'
+import useForm from '../utils/useForm';
 
 type registerErrorResponse = {
     non_field_errors?: string[]
@@ -17,8 +17,8 @@ type registerErrorResponse = {
 
 const Login: NextPage = () => {
     const auth = useAuth()
-    const toast = useToast()
     const router = useRouter()
+    const { handleFormPost } = useForm()
 
     const defaultFormData: registerData = {
         username: '',
@@ -32,7 +32,7 @@ const Login: NextPage = () => {
     const [loading, setLoading] = React.useState(false)
 
 
-    const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
 
         const formDataAllowedKeys = Object.keys(defaultFormData)
@@ -46,36 +46,17 @@ const Login: NextPage = () => {
         }))
     }
 
-    const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-        setLoading(true)
-        e.preventDefault()
-        try {
-            await auth.signUp(formData)
-            setLoading(false)
-            router.push('/user')
-            toast({
-                title: 'Successfully Registered.',
-                status: 'success',
-                duration: 3000,
-                isClosable: true,
-                position: 'top',
-                variant: 'solid'
-            })
-        } catch (err) {
-            if (axios.isAxiosError(err)) {
-                const registerError = err as AxiosError<registerErrorResponse>
-                if (registerError && registerError.response) {
-                    setErr(registerError.response.data)
-                }
-            }
-            setLoading(false)
-            toast({
-                title: "something went wrong",
-                status: "error",
-                duration: 2500,
-                position: 'top'
-            })
-        }
+    const handleSignUp = (e: React.FormEvent) => {
+        handleFormPost<registerErrorResponse, registerData>({
+            event: e,
+            postData: formData,
+            fetcher: auth.signUp,
+            setErr: setErr,
+            setLoading: setLoading,
+            toastSuccess: 'Successfully Signed Up',
+            toastErr: 'Something went wrong.',
+            onSuccess: () => { router.push('/user') }
+        })
     }
 
 
