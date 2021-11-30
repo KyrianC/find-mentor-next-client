@@ -1,3 +1,5 @@
+import { AxiosInstance } from "axios"
+
 export interface UserResponse {
     id: number;
     email: string;
@@ -39,12 +41,11 @@ export type loginData = {
 export interface AuthContextInterface {
     isAuthenticated: boolean
     user: UserResponse | null
-    accessToken: string | null
-    refreshToken: string | null
     login: (postData: loginData) => Promise<void>
     logout: () => Promise<void>
     signUp: (postData: registerData) => Promise<void>
     resetPassword: (postData: { email: string }) => Promise<void>
+    authInstance: AxiosInstance
 }
 
 export interface AuthContextProps {
