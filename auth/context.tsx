@@ -137,7 +137,7 @@ const AuthProvider = ({ children }: authTypes.AuthContextProps): JSX.Element => 
     }
 
     const logout = async () => {
-        await authInstance.post('auth/logout/')
+        await instance.post('auth/logout/')
         desAuthenticate()
         toast({
             title: "Logged Out",
