@@ -35,8 +35,11 @@ const Explore: NextPage = ({ data }: InferGetServerSidePropsType<typeof getServe
             <SimpleGrid minChildWidth="250px" spacing="6">
                 {data.map((item: subCategoryResponse) => (
                     <LinkBox
+                        boxShadow="md"
                         bg="gray.600"
                         borderRadius="sm"
+                        overflow="hidden"
+                        title={item.title}
                         maxWidth="450px"
                         key={item.id}
                     >
