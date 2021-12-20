@@ -14,8 +14,28 @@ type handleFormPostParams<responseErrorType, PostDataType> = {
     onFail?: () => void,
 }
 
+type handleFormChangeParams<formData> = {
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    defaultFormData: formData
+    setFormData: (value: React.SetStateAction<formData>) => void
+}
+
 const useForm = () => {
     const toast = useToast()
+
+    const handleFormChange = <formData,>(params: handleFormChangeParams<formData>) => {
+        const { name, value } = params.event.target
+
+        const formDataAllowedKeys = Object.keys(params.defaultFormData)
+        if (!formDataAllowedKeys.includes(name)) {
+            throw TypeError(`"${name}" not in "${formDataAllowedKeys}"`)
+        }
+
+        params.setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }))
+    }
 
     const handleFormPost = async<responseErrorType, PostDataType>(params: handleFormPostParams<responseErrorType, PostDataType>) => {
         params.event && params.event.preventDefault()
@@ -55,7 +75,8 @@ const useForm = () => {
 
 
     return {
-        handleFormPost
+        handleFormChange,
+        handleFormPost,
     }
 
 }
