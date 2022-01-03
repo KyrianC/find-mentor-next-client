@@ -12,23 +12,19 @@ type forgotPasswordErrorResponse = {
 
 const ForgotPassword: NextPage = () => {
     const { resetPassword } = useAuth()
-    const { handleFormPost } = useForm()
+    const { handleFormPost, err, loading } = useForm()
 
     const [email, setEmail] = React.useState('')
-    const [loading, setLoading] = React.useState(false);
     const [sent, setSent] = React.useState(false)
-    const [error, setError] = React.useState<forgotPasswordErrorResponse | null>(null)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
     }
 
-    const handleSubmit = () => {
-        handleFormPost({
+    const handleSubmit = async () => {
+        await handleFormPost<forgotPasswordErrorResponse, { email: string }>({
             postData: { email },
             fetcher: resetPassword,
-            setErr: setError,
-            setLoading: setLoading,
             toastSuccess: 'Email sent!',
             toastErr: 'Something went wrong.',
         })
@@ -37,9 +33,9 @@ const ForgotPassword: NextPage = () => {
 
     return (
         <Container>
-            {error?.non_field_errors && <Alert my="2" borderRadius="md" status="error">
+            {err?.non_field_errors && <Alert my="2" borderRadius="md" status="error">
                 <AlertIcon />
-                <AlertDescription>{error.non_field_errors}</AlertDescription>
+                <AlertDescription>{err.non_field_errors}</AlertDescription>
             </Alert>}
             <Box visibility={!sent ? 'visible' : 'hidden'}>
                 <form>
@@ -49,7 +45,7 @@ const ForgotPassword: NextPage = () => {
                         name="email"
                         inputType="email"
                         handleChange={handleChange}
-                        errors={error?.email}
+                        errors={err?.email}
                     />
                     <Button type="submit" onClick={handleSubmit} isLoading={loading} colorScheme="teal">
                         Reset Password

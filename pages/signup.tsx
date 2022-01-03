@@ -19,7 +19,7 @@ type registerErrorResponse = {
 const Login: NextPage = () => {
     const auth = useAuth()
     const router = useRouter()
-    const { handleFormPost } = useForm()
+    const { handleFormPost, err, loading } = useForm()
 
     const defaultFormData: registerData = {
         username: '',
@@ -29,8 +29,6 @@ const Login: NextPage = () => {
     }
 
     const [formData, setFormData] = React.useState<registerData>(defaultFormData)
-    const [err, setErr] = React.useState<registerErrorResponse | null>(null)
-    const [loading, setLoading] = React.useState(false)
 
 
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,8 +50,6 @@ const Login: NextPage = () => {
             event: e,
             postData: formData,
             fetcher: auth.signUp,
-            setErr: setErr,
-            setLoading: setLoading,
             toastSuccess: 'Successfully Signed Up',
             toastErr: 'Something went wrong.',
             onSuccess: () => { router.push('/user') }

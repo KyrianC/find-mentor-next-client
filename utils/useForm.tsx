@@ -1,15 +1,14 @@
 import { useToast } from '@chakra-ui/react'
 import axios, { AxiosError } from 'axios'
+import React from 'react'
 
 
-type handleFormPostParams<responseErrorType, PostDataType> = {
+type handleFormPostParams<PostDataType> = {
     event?: React.FormEvent
     postData: PostDataType,
     fetcher: (postData: PostDataType) => Promise<void>,
     toastSuccess?: string,
     toastErr?: string,
-    setErr: (value: React.SetStateAction<responseErrorType | null>) => void,
-    setLoading: (value: React.SetStateAction<boolean>) => void,
     onSuccess?: () => void,
     onFail?: () => void,
 }
@@ -22,6 +21,9 @@ type handleFormChangeParams<formData> = {
 
 const useForm = () => {
     const toast = useToast()
+    const [err, setErr] = React.useState<any>({})
+    const [loading, setLoading] = React.useState(false)
+
 
     const handleFormChange = <formData,>(params: handleFormChangeParams<formData>) => {
         const { name, value } = params.event.target
@@ -37,9 +39,9 @@ const useForm = () => {
         }))
     }
 
-    const handleFormPost = async<responseErrorType, PostDataType>(params: handleFormPostParams<responseErrorType, PostDataType>) => {
+    const handleFormPost = async<responseErrorType, PostDataType>(params: handleFormPostParams<PostDataType>) => {
         params.event && params.event.preventDefault()
-        params.setLoading(true)
+        setLoading(true)
         try {
             await params.fetcher(params.postData)
             params.toastSuccess && toast({
@@ -49,17 +51,17 @@ const useForm = () => {
                 isClosable: true,
                 position: 'top'
             })
-            params.setLoading(false)
+            setLoading(false)
             params.onSuccess && params.onSuccess()
 
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 const responseError = err as AxiosError<responseErrorType>
                 if (responseError && responseError.response) {
-                    params.setErr(responseError.response.data)
+                    setErr(responseError.response.data)
                 }
             }
-            params.setLoading(false)
+            setLoading(false)
             params.toastErr && toast({
                 title: params.toastErr,
                 duration: 2500,
@@ -73,10 +75,11 @@ const useForm = () => {
     }
 
 
-
     return {
         handleFormChange,
         handleFormPost,
+        err,
+        loading
     }
 
 }

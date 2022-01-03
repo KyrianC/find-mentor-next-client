@@ -19,12 +19,10 @@ type loginErrorResponse = {
 const Login: NextPage = () => {
     const auth = useAuth()
     const router = useRouter()
-    const { handleFormPost } = useForm()
+    const { handleFormPost, err, loading } = useForm()
 
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
-    const [err, setErr] = React.useState<loginErrorResponse | null>(null)
-    const [loading, setLoading] = React.useState(false)
 
 
     const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -39,8 +37,6 @@ const Login: NextPage = () => {
             event: e,
             postData: { username, password },
             fetcher: auth.login,
-            setErr: setErr,
-            setLoading: setLoading,
             toastSuccess: 'Successfully Logged In.',
             toastErr: 'Something went wrong.',
             onSuccess: () => { router.push('/') }
